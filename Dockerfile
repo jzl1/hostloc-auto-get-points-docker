@@ -1,10 +1,11 @@
-FROM python:rc-alpine3.13
+FROM alpine:latest
 WORKDIR /app
 RUN apk update \
-  && apk add wget \
+  && apk add --no-cache curl python3 py3-pip \
   && pip install requests pyaes \
-  && wget -O /app/hostloc_auto_get_points.py "https://raw.githubusercontent.com/jzl1/hostloc-auto-get-points-docker/main/hostloc_auto_get_points.py" \
-  && wget -O /app/run.sh "https://raw.githubusercontent.com/jzl1/hostloc-auto-get-points-docker/main/run.sh" \
-  && wget -O /app/loop.sh "https://raw.githubusercontent.com/jzl1/hostloc-auto-get-points-docker/main/loop.sh" \
+  && curl -L https://raw.githubusercontent.com/jzl1/hostloc-auto-get-points-docker/main/hostloc_auto_get_points.py > /app/hostloc_auto_get_points.py \
+  && curl -L https://raw.githubusercontent.com/jzl1/hostloc-auto-get-points-docker/main/run.sh > /app/run.sh \
+  && curl -L https://raw.githubusercontent.com/jzl1/hostloc-auto-get-points-docker/main/loop.sh > /app/loop.sh \
+  && chmod 755 /app/*
   && rm -rf /var/cache/apk/*
-CMD ["sh","/app/run.sh"]
+CMD ["/bin/sh","/app/run.sh"]
